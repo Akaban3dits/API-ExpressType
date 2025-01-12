@@ -1,7 +1,8 @@
 import express, { Application } from "express";
 import sequelize from "./config/database";
 import userRoutes from "./routes/userRoutes";
-import errorHandler from "./middlewares/errorHandler"; // Importa el middleware de manejo de errores
+import postRoutes from "./routes/postRoutes";
+import errorHandler from "./middlewares/errorHandler";
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
 
 app.use(errorHandler);
 

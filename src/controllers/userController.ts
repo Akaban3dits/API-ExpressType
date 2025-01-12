@@ -31,6 +31,8 @@ export const getUsers = async (_req: Request, res: Response) => {
 export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({ user });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ error: error.message });
@@ -40,7 +42,10 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-export const updateUser = async (req: Request, res: Response): Promise<Response> => {
+export const updateUser = async (
+  req: Request,
+  res: Response
+)=> {
   try {
     const { id } = req.params;
     const { name, email, password } = req.body;
@@ -53,7 +58,7 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
     user.password = password || user.password;
     await user.save();
 
-    return res.json({ user }); 
+    return res.json({ user });
   } catch (error) {
     if (error instanceof Error) {
       return res.status(400).json({ error: error.message });
@@ -63,14 +68,17 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
   }
 };
 
-export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
+export const deleteUser = async (
+  req: Request,
+  res: Response
+)=> {
   try {
     const { id } = req.params;
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     await user.destroy();
-    return res.json({ message: "User deleted successfully" }); 
+    return res.json({ message: "User deleted successfully" });
   } catch (error) {
     if (error instanceof Error) {
       return res.status(400).json({ error: error.message });
